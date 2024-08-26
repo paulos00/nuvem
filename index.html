@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Arquivo - PaaS Local</title>
+</head>
+<body>
+    <h1>Adicionar Arquivo</h1>
+    <form action="{{ url_for('add_file') }}" method="POST" enctype="multipart/form-data">
+        <label for="tenant_id">Tenant ID:</label><br>
+        <input type="text" id="tenant_id" name="tenant_id" required><br><br>
+        
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="file">Arquivo:</label><br>
+        <input type="file" id="file" name="file" accept="image/*" required onchange="previewImage(event)"><br><br>
+        
+        <!-- Área para pré-visualização da imagem -->
+        <div id="preview-container">
+            <img id="image-preview" src="#" alt="Pré-visualização da Imagem" style="display:none; max-width: 300px; max-height: 300px;"/>
+        </div>
+        
+        <input type="submit" value="Adicionar Arquivo">
+    </form>
+
+    <h2>Verificar Seus Arquivos</h2>
+    <form action="{{ url_for('user_files', tenant_id='PLACEHOLDER') }}" method="GET" onsubmit="this.action=this.action.replace('PLACEHOLDER', document.getElementById('tenant_id_view').value);">
+        <label for="tenant_id_view">Tenant ID:</label><br>
+        <input type="text" id="tenant_id_view" name="tenant_id_view" required><br><br>
+        <input type="submit" value="Ver Arquivos">
+    </form>
+
+    <!-- Script para pré-visualizar a imagem -->
+    <script>
+        function previewImage(event) {
+            var reader = new FileReader();
+            reader.onload = function(){
+                var output = document.getElementById('image-preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+</body>
+</html>
